@@ -3,11 +3,15 @@ const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const colors = require('colors')
 const productRoutes = require('./routes/productRoutes')
+const userRoutes = require('./routes/userRoutes')
 const {notFound,errorHandler} = require('./middleware/errorMiddleware')
 
 dotenv.config()
 
 const app = express()
+
+// accept json data in body
+app.use(express.json())
 
 // connecting to Database 
 connectDB()
@@ -19,6 +23,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/products',productRoutes)
+app.use('/api/users',userRoutes)
 
 app.use(notFound)
 
