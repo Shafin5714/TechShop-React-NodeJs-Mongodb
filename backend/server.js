@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const colors = require('colors')
 const productRoutes = require('./routes/productRoutes')
+const orderRoutes = require('./routes/orderRoutes')
 const userRoutes = require('./routes/userRoutes')
 const {notFound,errorHandler} = require('./middleware/errorMiddleware')
 
@@ -24,6 +25,8 @@ app.get('/',(req,res)=>{
 
 app.use('/api/products',productRoutes)
 app.use('/api/users',userRoutes)
+app.use('/api/orders',orderRoutes)
+app.get('/api/config/paypal',(req,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
 
 app.use(notFound)
 
