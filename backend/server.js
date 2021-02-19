@@ -7,6 +7,7 @@ const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const userRoutes = require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const morgan = require('morgan')
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -18,6 +19,10 @@ const app = express();
 
 // accept json data in body
 app.use(express.json());
+
+if(process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'))
+}
 
 
 
