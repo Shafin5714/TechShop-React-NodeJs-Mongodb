@@ -18,14 +18,18 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_FAIL,
   PRODUCT_CREATE_REVIEW_RESET,
-  PRODUCT_CREATE_REVIEW_SUCCESS
+  PRODUCT_CREATE_REVIEW_SUCCESS,
 } from "../constants/productConstants";
 import axios from "axios";
 
-export const listProducts = (keyword="") => async (dispatch) => {
+export const listProducts = (keyword = "", pageNumber = "") => async (
+  dispatch
+) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
-    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+    const { data } = await axios.get(
+      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+    );
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
@@ -34,11 +38,13 @@ export const listProducts = (keyword="") => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_LIST_FAIL,
-      payload: error.response && error.response.data.message ? error.response.data.message : error.message
-    })
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 };
-
 
 export const listProductDetails = (id) => async (dispatch) => {
   try {
@@ -52,17 +58,15 @@ export const listProductDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
-      payload: error.response && error.response.data.message ? error.response.data.message : error.message
-    })
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 };
 
-
-
-export const deleteProduct = (id) => async (
-  dispatch,
-  getState
-) => {
+export const deleteProduct = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_DELETE_REQUEST,
@@ -78,12 +82,10 @@ export const deleteProduct = (id) => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-   await axios.delete(`/api/products/${id}`, config);
+    await axios.delete(`/api/products/${id}`, config);
 
-   
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
-  
     });
   } catch (error) {
     dispatch({
@@ -96,11 +98,7 @@ export const deleteProduct = (id) => async (
   }
 };
 
-
-export const createProduct = () => async (
-  dispatch,
-  getState
-) => {
+export const createProduct = () => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_CREATE_REQUEST,
@@ -116,12 +114,11 @@ export const createProduct = () => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-   const {data} =await axios.post(`/api/products/`,{}, config);
+    const { data } = await axios.post(`/api/products/`, {}, config);
 
-   
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
-      payload:data
+      payload: data,
     });
   } catch (error) {
     dispatch({
@@ -134,10 +131,7 @@ export const createProduct = () => async (
   }
 };
 
-export const updateProduct = (product) => async (
-  dispatch,
-  getState
-) => {
+export const updateProduct = (product) => async (dispatch, getState) => {
   console.log(product);
   try {
     dispatch({
@@ -154,12 +148,15 @@ export const updateProduct = (product) => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-   const {data} =await axios.put(`/api/products/${product._id}`,product, config);
+    const { data } = await axios.put(
+      `/api/products/${product._id}`,
+      product,
+      config
+    );
 
-   
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,
-      payload:data
+      payload: data,
     });
   } catch (error) {
     dispatch({
@@ -172,14 +169,13 @@ export const updateProduct = (product) => async (
   }
 };
 
-export const createProductReview = (productId,review) => async (
+export const createProductReview = (productId, review) => async (
   dispatch,
   getState
 ) => {
-
   try {
     dispatch({
-      type: PRODUCT_CREATE_REVIEW_REQUEST
+      type: PRODUCT_CREATE_REVIEW_REQUEST,
     });
 
     const {
@@ -192,9 +188,8 @@ export const createProductReview = (productId,review) => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-   await axios.post(`/api/products/${productId}/reviews`,review, config);
+    await axios.post(`/api/products/${productId}/reviews`, review, config);
 
-   
     dispatch({
       type: PRODUCT_CREATE_REVIEW_SUCCESS,
     });
