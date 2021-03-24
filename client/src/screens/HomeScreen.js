@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
-import { Helmet } from "react-helmet";
 
 const HomeScreen = ({ match }) => {
   // const [products,setProducts] = useState([])
