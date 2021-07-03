@@ -8,10 +8,7 @@ import {
   ListGroup,
   Button,
   Card,
-  Form,
-  ListGroupItem,
-  FormGroup,
-  FormLabel,
+  Form
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import {
