@@ -8,6 +8,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const userRoutes = require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const morgan = require('morgan')
+const cors = require('cors')
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -16,9 +17,11 @@ dotenv.config();
 const app = express();
 
 
+app.use(cors())
 
 // accept json data in body
 app.use(express.json());
+
 
 if(process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'))

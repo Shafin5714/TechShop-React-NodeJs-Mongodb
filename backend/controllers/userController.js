@@ -20,6 +20,42 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid email or password");
   }
 });
+// Google login
+const googlelogin = asyncHandler(async (req, res) => {
+  const { email, name, googleId } = req.body;
+  console.log(email,name,googleId);
+  
+
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    const user = await User.create({
+      // _id: googleId,
+      name,
+      email,
+      // password,
+    });
+    if (user) {
+     return res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  }else{
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  }
+});
 
 // get user profile api/users/profile
 const getUserProfile = asyncHandler(async (req, res) => {
@@ -97,25 +133,22 @@ const getUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
-
 // delete user DELETE /api/users/:id
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
-  if(user){
-    await user.remove()
-    res.json({message:"User removed"})
-  }else{
-    res.status(404)
-    throw new Error("User not found")
+  if (user) {
+    await user.remove();
+    res.json({ message: "User removed" });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
- 
 });
-
 
 // Get user by id  /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password')
-  
+  const user = await User.findById(req.params.id).select("-password");
+
   if (user) {
     res.json(user);
   } else {
@@ -124,34 +157,28 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
-
 // admin user update
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
-  
+
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin 
-   
+    user.isAdmin = req.body.isAdmin;
+
     const updatedUser = await user.save();
-    
 
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-      
     });
   } else {
     res.status(404);
     throw new Error("User not found");
   }
 });
-
-
-
 
 module.exports = {
   authUser,
@@ -161,7 +188,6 @@ module.exports = {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  googlelogin,
 };
-
-
